@@ -1,26 +1,26 @@
 from pptx import Presentation
+import argparse
 import sys, time
 
 def generator(in_file, out_file):
 
     prs = Presentation(in_file)
-
     horizontal, column, images = get_setting(prs)
 
-    # 가로 세로를  순서대로 정렬하는 코드
+    # 1. 가로 세로를 순서대로 정렬하는 코드
     horizontal = sorted(horizontal, key=lambda x: int(x.top))
     column = sorted(column, key=lambda x: int(x.left))
 
-    # 가로의 개수만큼씩 나누는 코드.
+    # 2. 가로의 개수만큼씩 나누는 코드.
     images = sorted(images, key=lambda x: int(x.top))
     temp = [[] for _ in range(len(column))]
 
-    # align
     for i in range(len(column)):
         temp[i] = images[i*len(horizontal): (i+1)*len(horizontal)]
         temp[i] = sorted(temp[i], key=lambda x: int(x.left))
     images = temp
 
+    # 3. align
     for i in range(len(column)):
         for j in range(len(horizontal)):
             images[i][j].top = column[i].top
@@ -50,6 +50,9 @@ def get_setting(prs):
     return horizontal, column, images
 
 if __name__ == "__main__":
-    in_file = input("Enter input file path: ")
-    out_file = input("Enter output file path: ")
-    generator(in_file, out_file)
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--infile', type=str, help='input file path')
+    parser.add_argument('--outfile', type=str, help='output file path')
+    args = parser.parse_args()
+
+    generator(args.infile, args.outfile)
