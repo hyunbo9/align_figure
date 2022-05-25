@@ -22,12 +22,15 @@ def generator(args):
     images = temp
 
     # 3. align
+    # TODO: Tim sort가 stable sort라서 이걸로 정렬 해봐도 될듯.
+
     for i in range(len(column)):
         for j in range(len(horizontal)):
             images[i][j].top = column[i].top
             images[i][j].left = horizontal[j].left
 
     prs.save(out_file)
+
 
 def get_setting(prs, args):
     shapes = prs.slides[args.where-1].shapes
@@ -53,7 +56,7 @@ def get_setting(prs, args):
 def explain():
     print("################################")
     print("1. 파일 개수가 grid 형식과 다르면 작동하지 않음.")
-    print("2. input ppt의 첫번째 slide에서 작동하는 것이 default. 바꾸고 싶으면 --where 인자를 사용할 것. (index는 1부터 시작)")
+    print("2. input ppt의  번째 slide에서 작동하는 것이 default. 바꾸고 싶으면 --where 인자를 사용할 것. (index는 1부터 시작)")
     print("################################")
 
 if __name__ == "__main__":
@@ -63,7 +66,10 @@ if __name__ == "__main__":
     parser.add_argument('--infile', type=str, help='input file path')
     parser.add_argument('--outfile', type=str, help='output file path')
     parser.add_argument('--where', type=int, default=1,  help='output file path')
+
     args = parser.parse_args()
 
     generator(args)
+
+    print("Complete !!")
 
